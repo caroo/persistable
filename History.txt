@@ -1,3 +1,8 @@
+== 0.5.2 2009-01-28
+
+* 1 major enhancement:
+  * Added missing gem dependencies
+
 == 0.0.1 2009-01-06
 
 * 1 major enhancement:

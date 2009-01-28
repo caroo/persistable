@@ -3,11 +3,12 @@ require File.dirname(__FILE__) + '/lib/persistable'
 
 $hoe = Hoe.new('persistable', Persistable::VERSION) do |p|
   p.developer('Caroo GmbH', 'dev@pkw.de')
-  p.post_install_message = 'PostInstall.txt'
+  p.post_install_message = File.read('PostInstall.txt')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.extra_dev_deps = [
     ['mocha'],
     ['mogilefs-client'],
+    ['active_support', ">= 2.2.2"],
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]
   p.summary = "Persistable is a library for persisting IO-Data into any storage you like. It provides adapters for in-memory storage, file storage and mogile-fs but can be easily extended with your own adapters."
