@@ -1,3 +1,8 @@
+== 0.5.3 2009-01-28
+
+* 1 minor enhancement:
+  * Separated dependencies in dev and runtime dependencies
+
 == 0.5.2 2009-01-28
 
 * 1 major enhancement:
