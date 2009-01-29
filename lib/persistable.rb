@@ -5,8 +5,8 @@ require 'persistable/fs_adapter'
 require 'persistable/memory_adapter'
 require 'persistable/mogile_fs_adapter'
 require 'persistable/factory'
-require 'active_support/core_ext/hash' # for symbolize_keys
+require 'active_support' # for symbolize_keys
 
 module Persistable
-  VERSION = "0.5.4"
+  VERSION = "0.5.5"
 end
