@@ -1,3 +1,8 @@
+== 0.5.6 2009-01-29
+
+* 1 major enhancement:
+  * mogile-fs-adapter now has the same handling for non-existant keys as the other adapters: returning nil
+
 == 0.5.4 2009-01-29
 
 * 1 minor enhancement:

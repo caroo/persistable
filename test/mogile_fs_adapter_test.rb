@@ -49,5 +49,18 @@ class MogileFSAdapterTest < Test::Unit::TestCase
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => ["tracker1.test.com:6001", "tracker2.test.com:6001"], :class => 'devel')
     assert_equal "devel", adapter.mogile_fs_class
   end
+  
+  def test_should_return_nil_if_file_was_not_found
+    adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.com:6001", :class => 'devel')
+    
+    persistable_object_out = mock("PersistableOut")
+    persistable_object_out.expects(:persistence_key).returns("42")
+    
+    connection_out = mock("MogileFS-Connection")
+    connection_out.expects(:get_file_data).with("42").returns(nil)
+    adapter.expects(:connection).returns(connection_out)
+    fetched_data = adapter.read(persistable_object_out)    
+    assert_nil fetched_data
+  end
     
 end

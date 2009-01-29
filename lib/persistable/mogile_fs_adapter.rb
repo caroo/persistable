@@ -18,7 +18,9 @@ module Persistable
     end
     
     def read(persistable)
-      persistable.persistence_data = StringIO.new(connection.get_file_data(persistable.persistence_key))
+      if data = connection.get_file_data(persistable.persistence_key)
+        persistable.persistence_data = StringIO.new(data)  
+      end
     end
     
     def delete(persistable)
