@@ -9,7 +9,7 @@ module Persistable
     
     def initialize(options = {})
       hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
-      @connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts)
+      @connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
       @mogile_fs_class = options[:class]
     end
     

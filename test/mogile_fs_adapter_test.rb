@@ -39,14 +39,20 @@ class MogileFSAdapterTest < Test::Unit::TestCase
   end
   
   def test_should_set_domain_tracker_and_class
-    MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker.test.com:6001"])
+    MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker.test.com:6001"], :timeout => 10)
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.com:6001", :class => 'devel')
     assert_equal "devel", adapter.mogile_fs_class
   end
   
   def test_should_set_domain_multiple_tracker_and_class
-    MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker1.test.com:6001", "tracker2.test.com:6001"])
+    MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker1.test.com:6001", "tracker2.test.com:6001"], :timeout => 10)
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => ["tracker1.test.com:6001", "tracker2.test.com:6001"], :class => 'devel')
+    assert_equal "devel", adapter.mogile_fs_class
+  end
+  
+  def test_should_set_timeout
+    MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker.test.com:6001"], :timeout => 20)
+    adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.com:6001", :class => 'devel', :timeout => 20)
     assert_equal "devel", adapter.mogile_fs_class
   end
   

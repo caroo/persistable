@@ -1,3 +1,8 @@
+== 0.5.7 2009-02-18
+
+* 1 major enhancement:
+  * mogile-fs-adapter can now be given a timeout option
+
 == 0.5.6 2009-01-29
 
 * 1 major enhancement:
