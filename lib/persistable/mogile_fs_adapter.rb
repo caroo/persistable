@@ -33,8 +33,14 @@ module Persistable
     def delete(persistable)
       hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
       connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
-      status = connection.delete(persistable.persistence_key)
-      connection.backend.shutdown
+      begin
+        status = connection.delete(persistable.persistence_key)  
+      rescue MogileFS::Backend::UnknownKeyError => e
+        status = false
+      ensure
+        connection.backend.shutdown
+      end
+
       status
     end
     

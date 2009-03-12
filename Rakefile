@@ -11,7 +11,7 @@ $hoe = Hoe.new('persistable', Persistable::VERSION) do |p|
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]
   p.extra_deps = [
-    ['mogilefs-client'],
+    ['mogilefs-client', ">= 2.0.2"],
     ['activesupport', ">= 2.2.2"]
   ]
   p.summary = "Persistable is a library for persisting IO-Data into any storage you like. It provides adapters for in-memory storage, file storage and mogile-fs but can be easily extended with your own adapters."

@@ -8,5 +8,5 @@ require 'persistable/factory'
 require 'active_support' # for symbolize_keys
 
 module Persistable
-  VERSION = "0.5.9"
+  VERSION = "0.5.10"
 end

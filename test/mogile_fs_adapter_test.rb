@@ -14,7 +14,6 @@ class MogileFSAdapterTest < Test::Unit::TestCase
     connection_in.expects(:store_file).with("42", "devel", data_to_persist)
     connection_in.expects(:backend).returns(mock("MockBackend", :shutdown => true))
     MogileFS::MogileFS.expects(:new).at_least_once.with(:domain => "mydomain", :hosts => ["tracker.test.de:6001"], :timeout => 10).returns(connection_in)
-    # adapter.expects(:connection).returns(connection_in)
     
     adapter.write(persistable_object_in)
 
@@ -28,8 +27,6 @@ class MogileFSAdapterTest < Test::Unit::TestCase
     MogileFS::MogileFS.expects(:new).at_least_once.with(:domain => "mydomain", :hosts => ["tracker.test.de:6001"], :timeout => 10).returns(connection_out)
     
     adapter.read(persistable_object_out)    
-    # assert_kind_of StringIO, persistable_object_out.persistence_data
-    # assert_equal "The answer to all questions.", persistable_object_out.persistence_data.read
     
     persistable_object_delete = mock("PersistableOut")
     persistable_object_delete.expects(:persistence_key).returns("42")
@@ -43,21 +40,30 @@ class MogileFSAdapterTest < Test::Unit::TestCase
   end
   
   def test_should_set_domain_tracker_and_class
-    # MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker.test.com:6001"], :timeout => 5)
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.de:6001", :class => 'devel')
     assert_equal "devel", adapter.mogile_fs_class
   end
   
   def test_should_set_domain_multiple_tracker_and_class
-    # MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker1.test.com:6001", "tracker2.test.com:6001"], :timeout => 5)
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => ["tracker1.test.de:6001", "tracker2.test.com:6001"], :class => 'devel')
     assert_equal "devel", adapter.mogile_fs_class
   end
   
   def test_should_set_timeout
-    # MogileFS::MogileFS.expects(:new).with(:domain => "mydomain", :hosts => ["tracker.test.com:6001"], :timeout => 10)
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.de:6001", :class => 'devel', :timeout => 10)
     assert_equal "devel", adapter.mogile_fs_class
+  end
+  
+  def test_should_handle_unknown_key_on_delete_gracefully
+    adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.de:6001", :class => 'devel')
+    connection_delete = mock("MogileFS-Connection")
+    persistable_object_delete = mock("PersistableOut")
+    persistable_object_delete.expects(:persistence_key).returns("42")
+    connection_delete.expects(:delete).raises(MogileFS::Backend::UnknownKeyError)
+    connection_delete.expects(:backend).returns(mock("MockBackend", :shutdown => true))
+    MogileFS::MogileFS.expects(:new).at_least_once.with(:domain => "mydomain", :hosts => ["tracker.test.de:6001"], :timeout => 10).returns(connection_delete)
+    
+    assert_equal(false, adapter.delete(persistable_object_delete))
   end
   
   def test_should_return_nil_if_file_was_not_found
