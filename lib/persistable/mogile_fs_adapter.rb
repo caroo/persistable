@@ -3,28 +3,39 @@ require 'mogilefs'
 module Persistable
   class MogileFSAdapter
     
-    attr_reader :mogile_fs_class, :connection
+    attr_reader :mogile_fs_class, :options
     
-    private :connection
     
     def initialize(options = {})
-      hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
-      @connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
+      @options = options
       @mogile_fs_class = options[:class]
     end
     
     def write(persistable)
-      connection.store_file(persistable.persistence_key, mogile_fs_class, persistable.persistence_data)
+      hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
+      connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
+      status = connection.store_file(persistable.persistence_key, mogile_fs_class, persistable.persistence_data)
+      connection.backend.shutdown
+      status
     end
     
     def read(persistable)
+      hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
+      connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
       if data = connection.get_file_data(persistable.persistence_key)
-        persistable.persistence_data = StringIO.new(data)  
+        persistable.persistence_data = StringIO.new(data)
+      else
+        persistable.persistence_data = nil
       end
+      connection.backend.shutdown
     end
     
     def delete(persistable)
-      connection.delete(persistable.persistence_key)
+      hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
+      connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
+      status = connection.delete(persistable.persistence_key)
+      connection.backend.shutdown
+      status
     end
     
   end

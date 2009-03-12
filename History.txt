@@ -1,3 +1,8 @@
+== 0.5.9 2009-03-06
+
+* 1 major enhancement:
+  * mogile-fs-adapter now opens and closes the connection for every action
+
 == 0.5.7 2009-02-18
 
 * 1 major enhancement:
