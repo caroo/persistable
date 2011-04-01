@@ -1,7 +1,10 @@
-%w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
+%w[hoe rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
 require File.dirname(__FILE__) + '/lib/persistable'
 
-$hoe = Hoe.new('persistable', Persistable::VERSION) do |p|
+Hoe.plugin :newgem
+Hoe.plugins.delete :rubyforge
+Hoe.plugins.delete :test
+$hoe = Hoe.spec('persistable') do |p|
   p.developer('Caroo GmbH', 'dev@pkw.de')
   p.post_install_message = File.read('PostInstall.txt')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
