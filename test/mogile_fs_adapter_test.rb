@@ -66,6 +66,19 @@ class MogileFSAdapterTest < Test::Unit::TestCase
     assert_equal(false, adapter.delete(persistable_object_delete))
   end
   
+  def test_should_handle_unknown_key_on_read_gracefully
+    adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.de:6001", :class => 'devel')
+    connection_delete = mock("MogileFS-Connection")
+    persistable_object_read = mock("PersistableOut")
+    persistable_object_read.expects(:persistence_key).returns("42")
+    persistable_object_read.expects(:persistence_data=).with(nil)
+    connection_delete.expects(:get_file_data).raises(MogileFS::Backend::UnknownKeyError)
+    connection_delete.expects(:backend).returns(mock("MockBackend", :shutdown => true))
+    MogileFS::MogileFS.expects(:new).at_least_once.with(:domain => "mydomain", :hosts => ["tracker.test.de:6001"], :timeout => 10).returns(connection_delete)
+    
+    assert_nothing_raised(MogileFS::Backend::UnknownKeyError) { adapter.read(persistable_object_read) }
+  end
+  
   def test_should_return_nil_if_file_was_not_found
     adapter = Persistable::MogileFSAdapter.new(:domain => "mydomain", :tracker => "tracker.test.de:6001", :class => 'devel')
     

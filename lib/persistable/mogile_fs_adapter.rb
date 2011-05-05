@@ -22,12 +22,17 @@ module Persistable
     def read(persistable)
       hosts = options[:tracker].is_a?(String) ? [options[:tracker]] : options[:tracker]
       connection = MogileFS::MogileFS.new(:domain => options[:domain], :hosts => hosts, :timeout => options[:timeout] ? options[:timeout] : 10)
-      if data = connection.get_file_data(persistable.persistence_key)
-        persistable.persistence_data = StringIO.new(data)
-      else
+      begin
+        if data = connection.get_file_data(persistable.persistence_key)
+          persistable.persistence_data = StringIO.new(data)
+        else
+          persistable.persistence_data = nil
+        end
+      rescue MogileFS::Backend::UnknownKeyError => e
         persistable.persistence_data = nil
+      ensure
+        connection.backend.shutdown
       end
-      connection.backend.shutdown
     end
     
     def delete(persistable)

@@ -20,7 +20,9 @@ module Persistable
     end
     
     def delete(persistable)
-      File.delete("#{storage_location}/#{persistable.persistence_key}")
+      if File.exists?(path = "#{storage_location}/#{persistable.persistence_key}")
+        File.delete("#{storage_location}/#{persistable.persistence_key}")
+      end
     end
     
   end
