@@ -28,7 +28,7 @@ module Persistable
         else
           persistable.persistence_data = nil
         end
-      rescue MogileFS::Backend::UnknownKeyError => e
+      rescue MogileFS::Backend::UnknownKeyError, MogileFS::Backend::NoKeyError => e
         persistable.persistence_data = nil
       ensure
         connection.backend.shutdown
