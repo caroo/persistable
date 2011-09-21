@@ -9,7 +9,7 @@ module Persistable
     
     def write(persistable)
       File.open("#{storage_location}/#{persistable.persistence_key}", "w") do |file|
-        file.puts persistable.persistence_data.read
+        file.write persistable.persistence_data.read
       end
     end
     
