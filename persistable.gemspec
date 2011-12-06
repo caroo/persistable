@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Persistence gem for pkw.de images}
   s.description = %q{Defines different ways to store images: file, memory, mogile_fs}
   
-  s.add_dependency "mogilefs-client", ">= 2.0.2"
+  s.add_dependency "mogilefs-client", "2.2.0"
   s.add_development_dependency "rake"
   s.add_development_dependency "test-unit"
   s.add_development_dependency "mocha"
