@@ -2,16 +2,16 @@
 
 == Description
 
-Persistable is a library for persisting IO-Data into any storage you like. It provides adapters for in-memory storage, file storage and mogile-fs but can be easily extended with your own adapters.
+Persistable is a library for persisting IO-Data into any storage you like. It provides adapters for in-memory storage, file storage, mogile-fs storage and a { fog gem }[http://fog.io] powered cloud storage but can be easily extended with your own adapters.
 
-Persistable has been harvested from project pkw.de[http://pkw.de] of {Caroo GmbH}[http://caroo.com].
+Persistable has been harvested from project pkw.de[http://pkw.de] of { Caroo GmbH }[http://caroo.com].
 
 == Download and Installation
 
 Install the gem with the following command...
 
   $ gem install persistable --source http://github.com/pkwde/persistable
- 
+
 == Examples
 
   class Image
@@ -61,4 +61,4 @@ Install the gem with the following command...
 
 Copyright Caroo GmbH 2009
 
-You may use, copy and redistribute this library under the same terms as {Ruby itself}[http://www.ruby-lang.org/en/LICENSE.txt] or under the {MIT license}[http://mocha.rubyforge.org/files/MIT-LICENSE.html].
+You may use, copy and redistribute this library under the same terms as { Ruby itself }[http://www.ruby-lang.org/en/LICENSE.txt] or under the { MIT license }[http://mocha.rubyforge.org/files/MIT-LICENSE.html].

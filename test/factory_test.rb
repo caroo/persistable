@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'persistable/factory'
 
 class FactoryTest < Test::Unit::TestCase
 
@@ -8,7 +9,7 @@ class FactoryTest < Test::Unit::TestCase
     persistable = Persistable::Factory.build(yml_file_name, {})
     assert_kind_of Persistable::FSAdapter, persistable
   end
-  
+
   def test_should_build_memory_adapter_from_yml
     yml_file_name = "adapter.yml"
     Persistable::Factory.expects(:load_yml).with(yml_file_name, {}).returns({:adapter => {:type => "memory"}})
@@ -32,7 +33,7 @@ class FactoryTest < Test::Unit::TestCase
     YAML.expects(:load_file).with("adapter.yml").returns(mock_hash)
     Persistable::Factory.load_yml("adapter.yml")
   end
-  
+
   def test_should_just_return_defaults_in_load_yml_if_file_does_not_exist
     file_mock = mock("File_mock")
     File.expects(:exists?).returns(false)
@@ -40,13 +41,13 @@ class FactoryTest < Test::Unit::TestCase
     loaded_config = Persistable::Factory.load_yml("adapter.yml", defaults)
     assert_equal defaults, loaded_config
   end
-  
+
   def test_should_build_adapter_from_defaults
     defaults = mock("defaults")
     Persistable::Factory.expects(:load_yml).with(nil, defaults).returns({:adapter => {:type => "memory"}})
     Persistable::Factory.build(nil, defaults)
   end
-  
+
   def test_build_should_raise_exception_if_wrong_parameter
     Persistable::Factory.expects(:load_yml).with("file_path", {}).returns(:wrong => :hash)
     assert_raise(ArgumentError) { Persistable::Factory.build("file_path") }
