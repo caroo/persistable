@@ -30,6 +30,9 @@ module Persistable
       when 'memory'
         require "persistable/memory_adapter"
         Persistable::MemoryAdapter.new(adapter_config)
+      when 'cloud'
+        require "persistable/cloud_storage_adapter"
+        Persistable::CloudStorageAdapter.new(adapter_config)
       end
 
       return adapter
