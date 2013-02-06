@@ -54,4 +54,23 @@ class FactoryTest < Test::Unit::TestCase
     Persistable::Factory.expects(:load_yml).with("file_path", {}).returns(:adapter => {:no_type => "but_adapter"})
     assert_raise(ArgumentError) { Persistable::Factory.build("file_path") }
   end
+
+  def test_should_build_cloud_storage_adapter_using_yml
+    yml_file_name = "adapter.yml"
+    Persistable::Factory.expects(:load_yml).with(yml_file_name, {}).returns(
+      {:adapter =>
+        {
+          :type => "cloud",
+          :directory => "store_directory",
+          :provider => "local",
+          :provider_options => {
+            :local_root => "/tmp"
+          }
+        }
+      }
+    )
+
+    persistable = Persistable::Factory.build(yml_file_name, {})
+    assert_kind_of Persistable::CloudStorageAdapter, persistable
+  end
 end
