@@ -45,7 +45,7 @@ module Persistable
     # @return (@see #write)
     def read(persistable)
       if file = directory.files.get(persistable.persistence_key)
-        persistable.persistence_data = file.body
+        persistable.persistence_data = StringIO.new(file.body)
         return true
       end
       false
