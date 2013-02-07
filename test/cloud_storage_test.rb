@@ -17,7 +17,7 @@ class CloudStorageTest < Test::Unit::TestCase
     persistable = get_persistable
     assert adapter.read persistable
     assert persistable.persistence_data
-    assert_equal persistable.persistence_data, File.read(file_path)
+    assert_equal persistable.persistence_data.read, File.read(file_path)
   end
 
   def test_read_not_existent_path
